@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace CodeTycoon.Core
 {
@@ -166,23 +167,217 @@ namespace CodeTycoon.Core
         {
             ShowScreen(learningScreen);
             UpdateLearningScreen();
+            SetupBackButton(learningScreen);
         }
         
         public void ShowProjectsScreen()
         {
             ShowScreen(projectsScreen);
             UpdateProjectsScreen();
+            SetupBackButton(projectsScreen);
         }
         
         public void ShowSettingsScreen()
         {
             ShowScreen(settingsScreen);
+            SetupBackButton(settingsScreen);
+        }
+        
+        private void SetupBackButton(GameObject screen)
+        {
+            if (screen == null) return;
+            
+            // Find back button in the screen
+            Transform backButtonTransform = screen.transform.Find("BackButton");
+            if (backButtonTransform != null)
+            {
+                UnityEngine.UI.Button backButton = backButtonTransform.GetComponent<UnityEngine.UI.Button>();
+                if (backButton != null)
+                {
+                    // Clear existing listeners and add back functionality
+                    backButton.onClick.RemoveAllListeners();
+                    backButton.onClick.AddListener(() => ShowDashboard());
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"[UIManager] No BackButton found in {screen.name}");
+            }
         }
         
         private void UpdateLearningScreen()
         {
-            // TODO: Update learning screen with available concepts
             Debug.Log("[UIManager] Updating learning screen...");
+            
+            // Find the concept scroll view content area
+            if (learningScreen != null)
+            {
+                Transform scrollView = learningScreen.transform.Find("ConceptScrollView");
+                if (scrollView != null)
+                {
+                    Transform content = scrollView.Find("Viewport/Content");
+                    if (content == null)
+                    {
+                        content = scrollView.Find("Content"); // Fallback
+                    }
+                    
+                    if (content != null)
+                    {
+                        PopulateConceptButtons(content);
+                    }
+                    else
+                    {
+                        Debug.LogWarning("[UIManager] Could not find Content area in ConceptScrollView");
+                    }
+                }
+            }
+        }
+        
+        private void PopulateConceptButtons(Transform contentArea)
+        {
+            // Clear existing buttons
+            foreach (Transform child in contentArea)
+            {
+                if (Application.isPlaying)
+                    Destroy(child.gameObject);
+                else
+                    DestroyImmediate(child.gameObject);
+            }
+            
+            // Get learning system
+            LearningSystem learningSystem = FindFirstObjectByType<LearningSystem>();
+            if (learningSystem == null) 
+            {
+                Debug.LogError("[UIManager] LearningSystem not found!");
+                return;
+            }
+            
+            var gameData = GameManager.Instance?.GetGameData();
+            if (gameData == null) 
+            {
+                Debug.LogError("[UIManager] GameData not found!");
+                return;
+            }
+            
+            // Get all concepts from learning system
+            var allConceptIds = learningSystem.GetAllConceptIds();
+            
+            // Define the order we want to display them
+            var desiredOrder = new[] { "Variables", "Functions", "Loops", "Debugging", "OOP", "HTML", "CSS", "JavaScript" };
+            
+            // Show concepts in desired order first, then any others
+            var conceptsToShow = new List<string>();
+            
+            // Add concepts in preferred order if they exist
+            foreach (string conceptId in desiredOrder)
+            {
+                if (allConceptIds.Contains(conceptId))
+                {
+                    conceptsToShow.Add(conceptId);
+                }
+            }
+            
+            // Add any remaining concepts not in our ordered list
+            foreach (string conceptId in allConceptIds)
+            {
+                if (!conceptsToShow.Contains(conceptId))
+                {
+                    conceptsToShow.Add(conceptId);
+                }
+            }
+            
+            Debug.Log($"[UIManager] Creating {conceptsToShow.Count} concept buttons from learning system...");
+            Debug.Log($"[UIManager] Concepts to show: {string.Join(", ", conceptsToShow)}");
+            
+            foreach (string conceptId in conceptsToShow)
+            {
+                CreateConceptButton(conceptId, learningSystem, contentArea);
+            }
+            
+            Debug.Log($"[UIManager] Created concept buttons. Content area has {contentArea.childCount} children.");
+        }
+        
+        private void CreateConceptButton(string conceptId, LearningSystem learningSystem, Transform parent)
+        {
+            // Create simple concept button UI
+            GameObject buttonGO = new GameObject($"Concept_{conceptId}");
+            buttonGO.transform.SetParent(parent, false);
+            
+            // Add RectTransform - let Grid Layout control the sizing
+            RectTransform buttonRT = buttonGO.AddComponent<RectTransform>();
+            // Don't set sizeDelta - let GridLayoutGroup handle it
+            
+            // Add UI components
+            UnityEngine.UI.Image bg = buttonGO.AddComponent<UnityEngine.UI.Image>();
+            bg.color = new Color(0.2f, 0.2f, 0.5f, 0.8f);
+            
+            UnityEngine.UI.Button button = buttonGO.AddComponent<UnityEngine.UI.Button>();
+            
+            // Add text
+            GameObject textGO = new GameObject("Text");
+            textGO.transform.SetParent(buttonGO.transform, false);
+            
+            RectTransform textRT = textGO.AddComponent<RectTransform>();
+            textRT.anchorMin = Vector2.zero;
+            textRT.anchorMax = Vector2.one;
+            textRT.sizeDelta = Vector2.zero;
+            textRT.anchoredPosition = Vector2.zero;
+            
+            TMPro.TextMeshProUGUI text = textGO.AddComponent<TMPro.TextMeshProUGUI>();
+            text.text = $"{conceptId}\nCost: {learningSystem.GetConceptCost(conceptId):F0} KP";
+            text.color = Color.white;
+            text.fontSize = 14;
+            text.alignment = TMPro.TextAlignmentOptions.Center;
+            
+            // Add click functionality
+            button.onClick.AddListener(() => {
+                if (learningSystem.CanUnlockConcept(conceptId))
+                {
+                    if (learningSystem.TryUnlockConcept(conceptId))
+                    {
+                        ShowNotification($"Unlocked: {conceptId}!", NotificationType.Success);
+                        UpdateLearningScreen(); // Refresh the display
+                    }
+                    else
+                    {
+                        ShowNotification("Not enough Knowledge Points!", NotificationType.Error);
+                    }
+                }
+                else
+                {
+                    var missing = learningSystem.GetMissingPrerequisites(conceptId);
+                    if (missing.Count > 0)
+                    {
+                        ShowNotification($"Prerequisites needed: {string.Join(", ", missing)}", NotificationType.Info);
+                    }
+                    else
+                    {
+                        ShowNotification("Not enough Knowledge Points!", NotificationType.Error);
+                    }
+                }
+            });
+            
+            // Color coding based on availability
+            GameData gameData = GameManager.Instance?.GetGameData();
+            if (gameData != null)
+            {
+                if (gameData.learningProgress.IsConceptMastered(conceptId))
+                {
+                    bg.color = Color.yellow; // Mastered
+                }
+                else if (gameData.learningProgress.IsConceptUnlocked(conceptId))
+                {
+                    bg.color = Color.green; // Unlocked
+                }
+                else if (learningSystem.CanUnlockConcept(conceptId))
+                {
+                    bg.color = Color.blue; // Available
+                }
+                else
+                {
+                    bg.color = Color.gray; // Locked
+                }
+            }
         }
         
         private void UpdateProjectsScreen()

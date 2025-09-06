@@ -14,7 +14,7 @@ namespace CodeTycoon.Core
         
         [Header("Financial Metrics")]
         public double monthlyRevenue = 0;
-        public double monthlyExpenses = 50; // Basic living expenses
+        public double monthlyExpenses = 10; // Reduced basic living expenses for early game
         public double reputation = 50; // 0-100 scale
         
         [Header("Team & Resources")]

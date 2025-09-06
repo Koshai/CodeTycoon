@@ -7,7 +7,7 @@ namespace CodeTycoon.Core
     public class CompanyManager : MonoBehaviour
     {
         [Header("Company Settings")]
-        [SerializeField] private float monthlyUpdateInterval = 30f; // 30 seconds = 1 month in game
+        [SerializeField] private float monthlyUpdateInterval = 120f; // 120 seconds = 1 month in game (slower pace)
         [SerializeField] private bool debugMode = false;
         
         [Header("Passive Income")]
@@ -141,10 +141,16 @@ namespace CodeTycoon.Core
             
             double basePassiveKP = 0;
             
-            // Each mastered concept provides passive KP
+            // Each unlocked concept provides some passive KP (even if not mastered)
+            foreach (string unlockedConcept in learning.unlockedConcepts)
+            {
+                basePassiveKP += GetConceptPassiveValue(unlockedConcept) * 0.3; // 30% rate for unlocked
+            }
+            
+            // Each mastered concept provides full passive KP
             foreach (string masteredConcept in learning.masteredConcepts)
             {
-                basePassiveKP += GetConceptPassiveValue(masteredConcept);
+                basePassiveKP += GetConceptPassiveValue(masteredConcept) * 0.7; // Additional 70% for mastery
             }
             
             // Apply learning multiplier
@@ -160,14 +166,23 @@ namespace CodeTycoon.Core
         {
             GameData gameData = GameManager.Instance.GetGameData();
             CompanyData company = gameData.companyData;
+            LearningProgress learning = gameData.learningProgress;
             
-            // Base passive cash from completed projects and reputation
-            double baseCash = company.projectsCompleted * 0.1; // $0.10 per second per completed project
+            // Base passive income for early game survival
+            double baseCash = 0.05; // $0.05 per second base income
+            
+            // Bonus from completed projects
+            double projectBonus = company.projectsCompleted * 0.1; // $0.10 per second per completed project
+            
+            // Bonus from learned concepts (knowledge generates small income)
+            double conceptBonus = learning.GetTotalConceptsLearned() * 0.02; // $0.02 per concept per second
             
             // Reputation bonus
             double reputationMultiplier = 1.0 + (company.reputation / 200.0); // Up to 50% bonus at max reputation
             
-            return baseCash * reputationMultiplier;
+            double totalCash = (baseCash + projectBonus + conceptBonus) * reputationMultiplier;
+            
+            return totalCash;
         }
         
         private double GetConceptPassiveValue(string conceptId)

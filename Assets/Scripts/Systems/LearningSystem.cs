@@ -274,6 +274,12 @@ namespace CodeTycoon.Core
         {
             List<string> available = new List<string>();
             
+            if (concepts == null || concepts.Count == 0)
+            {
+                Debug.LogWarning("[LearningSystem] No concepts loaded!");
+                return available;
+            }
+            
             foreach (var kvp in concepts)
             {
                 if (CanUnlockConcept(kvp.Key))
@@ -285,7 +291,21 @@ namespace CodeTycoon.Core
             // Sort by cost (cheapest first)
             available.Sort((a, b) => GetConceptCost(a).CompareTo(GetConceptCost(b)));
             
+            Debug.Log($"[LearningSystem] Available concepts: {string.Join(", ", available)}");
             return available;
+        }
+        
+        public List<string> GetAllConceptIds()
+        {
+            if (concepts == null || concepts.Count == 0)
+            {
+                Debug.LogWarning("[LearningSystem] No concepts loaded!");
+                return new List<string>();
+            }
+            
+            var allIds = new List<string>(concepts.Keys);
+            Debug.Log($"[LearningSystem] All concept IDs: {string.Join(", ", allIds)}");
+            return allIds;
         }
         
         public ProgrammingConcept GetConcept(string conceptId)

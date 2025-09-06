@@ -1,0 +1,334 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1194206815770487343
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 130236047963292215}
+  - component: {fileID: 6502328764644141109}
+  m_Layer: 0
+  m_Name: UIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &130236047963292215
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1194206815770487343}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7471511510345381157}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6502328764644141109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1194206815770487343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af4abc0dae180f6429ee6781bfff0461, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCanvas: {fileID: 0}
+  mainCanvasGroup: {fileID: 0}
+  knowledgePointsText: {fileID: 0}
+  cashText: {fileID: 0}
+  companyValueText: {fileID: 0}
+  companyStageText: {fileID: 0}
+  earnKnowledgeButton: {fileID: 0}
+  conceptsContainer: {fileID: 0}
+  conceptButtonPrefab: {fileID: 0}
+  projectsContainer: {fileID: 0}
+  projectCardPrefab: {fileID: 0}
+  notificationContainer: {fileID: 0}
+  notificationPrefab: {fileID: 0}
+  mainDashboard: {fileID: 0}
+  learningScreen: {fileID: 0}
+  projectsScreen: {fileID: 0}
+  settingsScreen: {fileID: 0}
+--- !u!1 &1765818170796741641
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7471511510345381157}
+  - component: {fileID: 1648524820182538015}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7471511510345381157
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1765818170796741641}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 130236047963292215}
+  - {fileID: 9184001105187734787}
+  - {fileID: 1097701236375581758}
+  - {fileID: 7059407919916183906}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1648524820182538015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1765818170796741641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb7412cab5e2a9848a7bb94c7dc8c86b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameData:
+    version: 1.0.0
+    totalPlayTime: 0
+    knowledgePoints: 0
+    cash: 100
+    companyValuation: 0
+    companyData:
+      companyName: Garage Dev Co.
+      foundedYear: 2025
+      currentStage: 0
+      monthlyRevenue: 0
+      monthlyExpenses: 50
+      reputation: 50
+      employees: []
+      office:
+        type: 0
+        capacity: 1
+        rentCost: 0
+        productivityMultiplier: 1
+        amenities: []
+      infrastructure: []
+      clientsSatisfied: 0
+      projectsCompleted: 0
+      projectsFailed: 0
+      avgProjectRating: 0
+    learningProgress:
+      unlockedConcepts: []
+      masteredConcepts: []
+      totalChallengesCompleted: 0
+      totalKnowledgeEarned: 0
+      currentStreak: 0
+      longestStreak: 0
+    activeProjects: []
+    completedProjects: []
+    settings:
+      masterVolume: 1
+      musicVolume: 0.7
+      sfxVolume: 0.8
+      audioEnabled: 1
+      autoSaveEnabled: 1
+      autoSaveInterval: 300
+      showHints: 1
+      skipTutorials: 0
+      gameSpeed: 1
+      showTooltips: 1
+      tooltipDelay: 0.5
+      showNotifications: 1
+      compactMode: 0
+      theme: Default
+      colorBlindMode: 0
+      textScale: 1
+      highContrast: 0
+      reducedMotion: 0
+      debugMode: 0
+      showFPS: 0
+      graphicsQuality: 1
+      vsyncEnabled: 1
+      difficultyMode: 1
+      showCodeHints: 1
+      enableAITutor: 1
+      preferredLanguage: C#
+  debugMode: 0
+  uiManager: {fileID: 6502328764644141109}
+  companyManager: {fileID: 7141951808152331255}
+  learningSystem: {fileID: 1572624438432818015}
+  audioManager: {fileID: 4483146226585995055}
+--- !u!1 &3551221016482371844
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1097701236375581758}
+  - component: {fileID: 1572624438432818015}
+  m_Layer: 0
+  m_Name: LearningSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1097701236375581758
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3551221016482371844}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7471511510345381157}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1572624438432818015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3551221016482371844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e27d3bf0234e0c41b307c3697e0372c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  conceptDatabase:
+    concepts: []
+  debugMode: 0
+  baseConceptCost: 10
+  costMultiplier: 1.5
+--- !u!1 &7530912960626735557
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7059407919916183906}
+  - component: {fileID: 4483146226585995055}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7059407919916183906
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7530912960626735557}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7471511510345381157}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4483146226585995055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7530912960626735557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 179d4e748e3fa5b47b5bd998a2001176, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  musicSource: {fileID: 0}
+  sfxSource: {fileID: 0}
+  uiSource: {fileID: 0}
+  enableAudio: 1
+  masterVolume: 1
+  musicVolume: 0.7
+  sfxVolume: 0.8
+  backgroundTracks: []
+  shuffleMusic: 1
+  loopMusic: 1
+  fadeTime: 2
+  clickSound: {fileID: 0}
+  successSound: {fileID: 0}
+  errorSound: {fileID: 0}
+  notificationSound: {fileID: 0}
+  unlockSound: {fileID: 0}
+  cashSound: {fileID: 0}
+--- !u!1 &8166769014672574721
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9184001105187734787}
+  - component: {fileID: 7141951808152331255}
+  m_Layer: 0
+  m_Name: CompanyManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9184001105187734787
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8166769014672574721}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7471511510345381157}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7141951808152331255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8166769014672574721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47ef3d480b041364a961f7ef90ca03c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monthlyUpdateInterval: 30
+  debugMode: 0
+  passiveIncomeInterval: 1

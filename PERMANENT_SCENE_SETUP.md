@@ -25,7 +25,8 @@
    - Reference Resolution: `1920 x 1080`
    - Screen Match Mode: `Match Width Or Height`
    - Match: `0.5`
-5. **Ensure it has**: `GraphicRaycaster` component
+5. **Add Component**: `Canvas Group` (for UI management)
+6. **Ensure it has**: `GraphicRaycaster` component
 
 ### 3. Create Dashboard Screen
 
@@ -60,12 +61,19 @@
    - Anchor Max: `(0.65, 1)`
    - Text: `Cash: $100`
 
-5. **Duplicate for Company Stage**:
+5. **Duplicate for Company Value**:
+   - **Name**: `CompanyValueText`
+   - Anchor Min: `(0.65, 0.5)`
+   - Anchor Max: `(0.95, 1)`
+   - Text: `Value: $0`
+   - Font Size: `18`
+
+6. **Duplicate for Company Stage**:
    - **Name**: `CompanyStageText`
    - Anchor Min: `(0.65, 0)`
-   - Anchor Max: `(0.95, 1)`
+   - Anchor Max: `(0.95, 0.5)`
    - Text: `Stage: Garage`
-   - Font Size: `20`
+   - Font Size: `18`
 
 #### 3c. Create Main Earn Knowledge Button
 1. **Right-click Dashboard** → UI → Button - TextMeshPro
@@ -79,14 +87,33 @@
    - Font Size: `32`
    - Color: White
 
-#### 3d. Create Navigation Panel
+#### 3d. Create Progress Bar
+1. **Right-click Dashboard** → UI → Slider
+2. **Name**: `CompanyProgressSlider`
+3. **RectTransform**:
+   - Anchor Min: `(0.1, 0.2)`
+   - Anchor Max: `(0.9, 0.25)`
+4. **Slider Settings**:
+   - Min Value: `0`
+   - Max Value: `1`
+   - Value: `0`
+
+5. **Right-click Dashboard** → UI → Text - TextMeshPro
+6. **Name**: `ProgressText`
+7. **RectTransform**:
+   - Anchor Min: `(0.1, 0.15)`
+   - Anchor Max: `(0.9, 0.2)`
+8. **Text**: `0% to Startup`
+9. **Alignment**: Center
+
+#### 3e. Create Navigation Panel
 1. **Right-click Dashboard** → UI → Panel
 2. **Name**: `NavigationPanel`
 3. **RectTransform**:
    - Anchor Min: `(0, 0)`
    - Anchor Max: `(1, 0.15)`
 
-#### 3e. Create Navigation Buttons
+#### 3f. Create Navigation Buttons
 1. **Right-click NavigationPanel** → UI → Button - TextMeshPro
 2. **Name**: `LearningButton`
 3. **RectTransform**:
@@ -99,14 +126,17 @@
    - `CompanyButton` - Anchor Min: `(0.52, 0.2)`, Max: `(0.73, 0.8)`, Text: `Company`  
    - `SettingsButton` - Anchor Min: `(0.77, 0.2)`, Max: `(0.95, 0.8)`, Text: `Settings`
 
-#### 3f. Add DashboardUI Component
+#### 3g. Add DashboardUI Component
 1. **Select Dashboard GameObject**
 2. **Add Component**: `DashboardUI`
 3. **Drag References**:
    - Knowledge Points Text → `KnowledgePointsText`
    - Cash Text → `CashText`
+   - Company Value Text → `CompanyValueText`
    - Company Stage Text → `CompanyStageText`
    - Earn Knowledge Button → `EarnKnowledgeButton`
+   - Company Progress Slider → `CompanyProgressSlider`
+   - Progress Text → `ProgressText`
    - Learning Button → `LearningButton`
    - Projects Button → `ProjectsButton`
    - Company Button → `CompanyButton`
@@ -121,21 +151,30 @@
 5. **Add Component**: `Image` (dark background)
    - Color: `(0.1, 0.1, 0.1, 0.9)`
 
-#### 4a. Create Title
+#### 4a. Create Title and Back Button
 1. **Right-click LearningScreen** → UI → Text - TextMeshPro
 2. **Name**: `Title`
 3. **Text**: `Programming Concepts`
 4. **Font Size**: `36`
 5. **RectTransform**:
-   - Anchor Min: `(0, 0.9)`
-   - Anchor Max: `(1, 1)`
+   - Anchor Min: `(0.2, 0.9)`
+   - Anchor Max: `(0.8, 1)`
+
+6. **Right-click LearningScreen** → UI → Button - TextMeshPro
+7. **Name**: `BackButton`
+8. **RectTransform**:
+   - Anchor Min: `(0.05, 0.9)`
+   - Anchor Max: `(0.15, 0.98)`
+9. **Button Text**: `← Back`
+10. **Font Size**: `16`
 
 #### 4b. Create Concept Grid
 1. **Right-click LearningScreen** → UI → Scroll View
 2. **Name**: `ConceptScrollView`
 3. **RectTransform**:
-   - Anchor Min: `(0.1, 0.1)`
-   - Anchor Max: `(0.9, 0.85)`
+   - Anchor Min: `(0.05, 0.1)`
+   - Anchor Max: `(0.95, 0.85)`
+   - Left/Right/Top/Bottom: all `0`
 
 4. **Content GameObject Settings**:
    - **Add Component**: `Grid Layout Group`
@@ -169,6 +208,7 @@
 1. **Select UIManager**
 2. **In UIManager Component**:
    - Main Canvas → Drag `MainCanvas`
+   - Main Canvas Group → Drag `MainCanvas` (Canvas Group component)
    - Main Dashboard → Drag `Dashboard`
    - Learning Screen → Drag `LearningScreen`
    - Projects Screen → Drag `ProjectsScreen`
