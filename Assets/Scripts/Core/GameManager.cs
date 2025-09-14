@@ -14,6 +14,7 @@ namespace CodeTycoon.Core
         [SerializeField] private CompanyManager companyManager;
         [SerializeField] private LearningSystem learningSystem;
         [SerializeField] private AudioManager audioManager;
+        [SerializeField] private CodingChallengeManager codingChallengeManager;
         
         // Singleton pattern
         private static GameManager _instance;
@@ -74,6 +75,7 @@ namespace CodeTycoon.Core
             yield return StartCoroutine(InitializeManager("AudioManager", () => audioManager?.Initialize()));
             yield return StartCoroutine(InitializeManager("CompanyManager", () => companyManager?.Initialize()));
             yield return StartCoroutine(InitializeManager("LearningSystem", () => learningSystem?.Initialize()));
+            yield return StartCoroutine(InitializeManager("CodingChallengeManager", () => codingChallengeManager?.Initialize()));
             yield return StartCoroutine(InitializeManager("UIManager", () => uiManager?.Initialize()));
             
             // Load save data

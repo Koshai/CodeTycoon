@@ -299,7 +299,7 @@ namespace CodeTycoon.Core
         
         private void CreateConceptButton(string conceptId, LearningSystem learningSystem, Transform parent)
         {
-            // Create simple concept button UI
+            // Create enhanced concept button UI
             GameObject buttonGO = new GameObject($"Concept_{conceptId}");
             buttonGO.transform.SetParent(parent, false);
             
@@ -307,77 +307,119 @@ namespace CodeTycoon.Core
             RectTransform buttonRT = buttonGO.AddComponent<RectTransform>();
             // Don't set sizeDelta - let GridLayoutGroup handle it
             
-            // Add UI components
+            // Add background image
             UnityEngine.UI.Image bg = buttonGO.AddComponent<UnityEngine.UI.Image>();
             bg.color = new Color(0.2f, 0.2f, 0.5f, 0.8f);
             
-            UnityEngine.UI.Button button = buttonGO.AddComponent<UnityEngine.UI.Button>();
+            // Add main button
+            UnityEngine.UI.Button mainButton = buttonGO.AddComponent<UnityEngine.UI.Button>();
             
-            // Add text
-            GameObject textGO = new GameObject("Text");
-            textGO.transform.SetParent(buttonGO.transform, false);
+            // Create concept name text
+            GameObject nameTextGO = new GameObject("ConceptName");
+            nameTextGO.transform.SetParent(buttonGO.transform, false);
             
-            RectTransform textRT = textGO.AddComponent<RectTransform>();
-            textRT.anchorMin = Vector2.zero;
-            textRT.anchorMax = Vector2.one;
-            textRT.sizeDelta = Vector2.zero;
-            textRT.anchoredPosition = Vector2.zero;
+            RectTransform nameTextRT = nameTextGO.AddComponent<RectTransform>();
+            nameTextRT.anchorMin = new Vector2(0, 0.6f);
+            nameTextRT.anchorMax = new Vector2(1, 1);
+            nameTextRT.sizeDelta = Vector2.zero;
+            nameTextRT.anchoredPosition = Vector2.zero;
             
-            TMPro.TextMeshProUGUI text = textGO.AddComponent<TMPro.TextMeshProUGUI>();
-            text.text = $"{conceptId}\nCost: {learningSystem.GetConceptCost(conceptId):F0} KP";
-            text.color = Color.white;
-            text.fontSize = 14;
-            text.alignment = TMPro.TextAlignmentOptions.Center;
+            TMPro.TextMeshProUGUI nameText = nameTextGO.AddComponent<TMPro.TextMeshProUGUI>();
+            nameText.text = conceptId;
+            nameText.color = Color.white;
+            nameText.fontSize = 16;
+            nameText.fontStyle = TMPro.FontStyles.Bold;
+            nameText.alignment = TMPro.TextAlignmentOptions.Center;
             
-            // Add click functionality
-            button.onClick.AddListener(() => {
-                if (learningSystem.CanUnlockConcept(conceptId))
-                {
-                    if (learningSystem.TryUnlockConcept(conceptId))
-                    {
-                        ShowNotification($"Unlocked: {conceptId}!", NotificationType.Success);
-                        UpdateLearningScreen(); // Refresh the display
-                    }
-                    else
-                    {
-                        ShowNotification("Not enough Knowledge Points!", NotificationType.Error);
-                    }
-                }
-                else
-                {
-                    var missing = learningSystem.GetMissingPrerequisites(conceptId);
-                    if (missing.Count > 0)
-                    {
-                        ShowNotification($"Prerequisites needed: {string.Join(", ", missing)}", NotificationType.Info);
-                    }
-                    else
-                    {
-                        ShowNotification("Not enough Knowledge Points!", NotificationType.Error);
-                    }
-                }
-            });
+            // Create status text
+            GameObject statusTextGO = new GameObject("StatusText");
+            statusTextGO.transform.SetParent(buttonGO.transform, false);
             
-            // Color coding based on availability
-            GameData gameData = GameManager.Instance?.GetGameData();
-            if (gameData != null)
-            {
-                if (gameData.learningProgress.IsConceptMastered(conceptId))
-                {
-                    bg.color = Color.yellow; // Mastered
-                }
-                else if (gameData.learningProgress.IsConceptUnlocked(conceptId))
-                {
-                    bg.color = Color.green; // Unlocked
-                }
-                else if (learningSystem.CanUnlockConcept(conceptId))
-                {
-                    bg.color = Color.blue; // Available
-                }
-                else
-                {
-                    bg.color = Color.gray; // Locked
-                }
-            }
+            RectTransform statusTextRT = statusTextGO.AddComponent<RectTransform>();
+            statusTextRT.anchorMin = new Vector2(0, 0.3f);
+            statusTextRT.anchorMax = new Vector2(1, 0.6f);
+            statusTextRT.sizeDelta = Vector2.zero;
+            statusTextRT.anchoredPosition = Vector2.zero;
+            
+            TMPro.TextMeshProUGUI statusText = statusTextGO.AddComponent<TMPro.TextMeshProUGUI>();
+            statusText.text = $"Cost: {learningSystem.GetConceptCost(conceptId):F0} KP";
+            statusText.color = Color.white;
+            statusText.fontSize = 12;
+            statusText.alignment = TMPro.TextAlignmentOptions.Center;
+            
+            // Create progress bar background
+            GameObject progressBGGO = new GameObject("ProgressBackground");
+            progressBGGO.transform.SetParent(buttonGO.transform, false);
+            
+            RectTransform progressBGRT = progressBGGO.AddComponent<RectTransform>();
+            progressBGRT.anchorMin = new Vector2(0.1f, 0.1f);
+            progressBGRT.anchorMax = new Vector2(0.9f, 0.25f);
+            progressBGRT.sizeDelta = Vector2.zero;
+            progressBGRT.anchoredPosition = Vector2.zero;
+            
+            UnityEngine.UI.Image progressBG = progressBGGO.AddComponent<UnityEngine.UI.Image>();
+            progressBG.color = new Color(0.1f, 0.1f, 0.1f, 0.5f);
+            
+            // Create progress bar fill
+            GameObject progressFillGO = new GameObject("ProgressFill");
+            progressFillGO.transform.SetParent(progressBGGO.transform, false);
+            
+            RectTransform progressFillRT = progressFillGO.AddComponent<RectTransform>();
+            progressFillRT.anchorMin = Vector2.zero;
+            progressFillRT.anchorMax = Vector2.one;
+            progressFillRT.sizeDelta = Vector2.zero;
+            progressFillRT.anchoredPosition = Vector2.zero;
+            
+            UnityEngine.UI.Image progressFill = progressFillGO.AddComponent<UnityEngine.UI.Image>();
+            progressFill.color = Color.white;
+            progressFill.type = UnityEngine.UI.Image.Type.Filled;
+            progressFill.fillMethod = UnityEngine.UI.Image.FillMethod.Horizontal;
+            progressFill.fillAmount = 0f;
+            
+            // Create challenge button (initially hidden)
+            GameObject challengeBtnGO = new GameObject("ChallengeButton");
+            challengeBtnGO.transform.SetParent(buttonGO.transform, false);
+            
+            RectTransform challengeBtnRT = challengeBtnGO.AddComponent<RectTransform>();
+            challengeBtnRT.anchorMin = new Vector2(0.7f, 0.7f);
+            challengeBtnRT.anchorMax = new Vector2(0.95f, 0.95f);
+            challengeBtnRT.sizeDelta = Vector2.zero;
+            challengeBtnRT.anchoredPosition = Vector2.zero;
+            
+            UnityEngine.UI.Image challengeBtnImg = challengeBtnGO.AddComponent<UnityEngine.UI.Image>();
+            challengeBtnImg.color = new Color(0.8f, 0.2f, 0.2f, 0.8f);
+            
+            UnityEngine.UI.Button challengeBtn = challengeBtnGO.AddComponent<UnityEngine.UI.Button>();
+            challengeBtnGO.SetActive(false); // Initially hidden
+            
+            // Add challenge button text
+            GameObject challengeTextGO = new GameObject("Text");
+            challengeTextGO.transform.SetParent(challengeBtnGO.transform, false);
+            
+            RectTransform challengeTextRT = challengeTextGO.AddComponent<RectTransform>();
+            challengeTextRT.anchorMin = Vector2.zero;
+            challengeTextRT.anchorMax = Vector2.one;
+            challengeTextRT.sizeDelta = Vector2.zero;
+            challengeTextRT.anchoredPosition = Vector2.zero;
+            
+            TMPro.TextMeshProUGUI challengeText = challengeTextGO.AddComponent<TMPro.TextMeshProUGUI>();
+            challengeText.text = "⚡";
+            challengeText.color = Color.white;
+            challengeText.fontSize = 10;
+            challengeText.alignment = TMPro.TextAlignmentOptions.Center;
+            
+            // Add EnhancedConceptButton component
+            EnhancedConceptButton conceptButton = buttonGO.AddComponent<EnhancedConceptButton>();
+            conceptButton.mainButton = mainButton;
+            conceptButton.conceptNameText = nameText;
+            conceptButton.statusText = statusText;
+            conceptButton.backgroundImage = bg;
+            conceptButton.progressFillImage = progressFill;
+            conceptButton.challengeButton = challengeBtn;
+            
+            // Get concept from learning system and setup
+            ProgrammingConcept concept = learningSystem.GetConcept(conceptId);
+            conceptButton.Setup(conceptId, concept, learningSystem);
         }
         
         private void UpdateProjectsScreen()
